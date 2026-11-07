@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SH12 Pro — لوحة إدارة الاشتراكات وبوت التيليجرام | @vvshiko</title>
+<style>
+  :root[data-theme="dark"] {
+    --bg: #040406;
+    --bg-grad: radial-gradient(120% 90% at 50% 0%, #16161c 0%, #040406 75%);
+    --nav-bg: rgba(8, 8, 11, 0.92);
+    --card: #0d0d11;
+    --card-2: #15151b;
+    --border: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.75);
+    --text: #ffffff;
+    --muted: #a1a1aa;
+    --accent: #ffffff;
+    --pill-bg: #ffffff;
+    --pill-text: #000000;
+    --code-bg: rgba(255, 255, 255, 0.08);
+    --code-text: #ffffff;
+    --ok: #10b981;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --chat-bg: #08080b;
+    --chat-head: #111116;
+    --bubble-bot: #16161d;
+    --bubble-user: #ffffff;
+    --bubble-user-text: #000000;
+    --shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f5f5f8;
+    --bg-grad: radial-gradient(120% 90% at 50% 0%, #ffffff 0%, #ececf1 75%);
+    --nav-bg: rgba(255, 255, 255, 0.94);
+    --card: #ffffff;
+    --card-2: #f3f3f6;
+    --border: #dcdce2;
+    --border-strong: #09090b;
+    --text: #09090b;
+    --muted: #52525b;
+    --accent: #09090b;
+    --pill-bg: #09090b;
+    --pill-text: #ffffff;
+    --code-bg: #ececf1;
+    --code-text: #09090b;
+    --ok: #059669;
+    --danger: #dc2626;
+    --warn: #d97706;
+    --chat-bg: #f3f3f7;
+    --chat-head: #ffffff;
+    --bubble-bot: #ffffff;
+    --bubble-user: #09090b;
+    --bubble-user-text: #ffffff;
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font: 13.5px/1.6 "Segoe UI", "Cairo", -apple-system, Tahoma, sans-serif;
+    background: var(--bg);
+    background-image: var(--bg-grad);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.22s ease, color 0.22s ease;
+  }
+
+  /* Top Navbar */
+  .navbar {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: transparent;
+    flex-shrink: 0;
+    transform: rotate(-3deg);
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+  }
+  .brand-logo:hover {
+    transform: rotate(0deg) scale(1.05);
+  }
+  .brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    direction: ltr;
+  }
+  .brand-sh12 {
+    font: italic 900 20px/1 "Segoe UI", "Arial Black", sans-serif;
+    letter-spacing: -0.6px;
+  }
+  .badge {
+    font: italic 900 11px/1 "Segoe UI", "Arial Black", sans-serif;
+    padding: 3.5px 9px;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    color: var(--pill-text);
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--card-2);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font: 800 12.5px "Segoe UI", "Cairo", Tahoma, sans-serif;
+    padding: 8px 13px;
+    border-radius: 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  }
+  .count-badge {
+    background: var(--danger);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 900;
+    padding: 1px 6px;
+    border-radius: 999px;
+  }
+
+  .top-right-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .theme-switch-btn {
+    border: 1.5px solid var(--border-strong);
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font: 900 12px "Segoe UI", "Cairo", Tahoma, sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .theme-switch-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+
+  .bot-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card-2);
+  }
+  .bot-pill.online {
+    border-color: rgba(16, 185, 129, 0.45);
+    color: var(--ok);
+  }
+  .bot-pill.offline {
+    border-color: var(--border);
+    color: var(--muted);
+  }
+
+  /* Main Layout */
+  .container {
+    max-width: 1420px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+  }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* Stats Row */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+  }
+  .stat-num {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-top: 4px;
+  }
+  .stat-lbl {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 800;
+  }
+  .stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+  }
+
+  /* Cards & Forms */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+  }
+  @media (max-width: 850px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card-2);
+    color: var(--text);
+    font: 700 13px "Segoe UI", "Cairo", Tahoma, sans-serif;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--border-strong);
+  }
+  .btn {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 15px;
+    font: 900 12.5px "Segoe UI", "Cairo", Tahoma, sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .btn-ok {
+    background: var(--ok);
+    color: #fff;
+  }
+  .btn-danger {
+    background: rgba(239, 68, 68, 0.14);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+  }
+  .btn-danger:hover {
+    background: var(--danger);
+    color: #fff;
+  }
+  .btn-ghost {
+    background: var(--card-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    border-color: var(--border-strong);
+  }
+
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 11px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 12px;
+  }
+  code.mono {
+    font: 900 12.5px "Consolas", "Courier New", monospace;
+    color: var(--code-text);
+    background: var(--code-bg);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    user-select: all;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .status-pill.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--ok);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+  .status-pill.suspended {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+  .status-pill.pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warn);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+
+  /* Live Simulator Grid */
+  .sim-grid {
+    display: grid;
+    grid-template-columns: 425px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1080px) {
+    .sim-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Telegram Bot Simulator Window */
+  .tg-chat-window {
+    background: var(--chat-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 675px;
+    box-shadow: var(--shadow);
+  }
+  .tg-head {
+    background: var(--chat-head);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tg-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .tg-bubble {
+    max-width: 84%;
+    padding: 11px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .tg-bubble.bot {
+    align-self: flex-start;
+    background: var(--bubble-bot);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-top-right-radius: 4px;
+  }
+  .tg-bubble.user {
+    align-self: flex-end;
+    background: var(--bubble-user);
+    color: var(--bubble-user-text);
+    font-weight: 700;
+    border-top-left-radius: 4px;
+  }
+  .tg-inline-btn {
+    margin-top: 7px;
+    width: 100%;
+    padding: 8.5px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--border-strong);
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    font: 900 12px "Segoe UI", "Cairo", Tahoma, sans-serif;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+  .tg-inline-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .tg-foot {
+    background: var(--chat-head);
+    padding: 11px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Orders Cards */
+  .orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 14px;
+  }
+  .order-card {
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .order-card.pending {
+    border-color: var(--border-strong);
+  }
+  .screenshot-preview {
+    width: 100%;
+    height: 165px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #050507;
+    border: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  /* Multi-payment list */
+  .pm-item {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1.4fr auto;
+    gap: 10px;
+    align-items: end;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 900px) {
+    .pm-item { grid-template-columns: 1fr; }
+  }
+
+  /* BotFather Copy Cards */
+  .copy-card {
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 13px;
+    margin-bottom: 12px;
+  }
+  .copy-card pre {
+    margin: 8px 0 0;
+    padding: 10px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    white-space: pre-wrap;
+    font: 700 12.5px/1.6 "Segoe UI", "Cairo", Tahoma, sans-serif;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Top Navbar with Official SH12 Pro Monochrome Logo & Dark/White Toggle -->
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="/logo.png" alt="SH12 Pro Logo">
+      </div>
+      <div>
+        <h1>
+          <span class="brand-wordmark">
+            <span class="brand-sh12">SH12</span>
+            <span class="badge">Pro</span>
+          </span>
+          <span>لوحة الاشتراكات وبوت التيليجرام</span>
+        </h1>
+        <div style="font-size:11.5px;color:var(--muted);">بصمة هاردوير ثابتة (HWID) • تعدد وسائل الدفع (@SH12Pro_Sub_bot) • المطور والدعم: <b dir="ltr">@vvshiko</b></div>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+      <button type="button" class="tab-btn active" data-tab="tab-sim">🧪 التجربة الحية (الأداة + البوت)</button>
+      <button type="button" class="tab-btn" data-tab="tab-subs">👥 المشتركين (قطع / تفعيل) <span id="navSubsCount" class="count-badge" style="background:#10b981;">0</span></button>
+      <button type="button" class="tab-btn" data-tab="tab-orders">📸 مراجعة طلبات الدفع <span id="navPendingCount" class="count-badge">0</span></button>
+      <button type="button" class="tab-btn" data-tab="tab-payments">💳 طرق الدفع والربط</button>
+      <button type="button" class="tab-btn" data-tab="tab-botkit">🎨 هوية البوت + التشفير</button>
+    </div>
+
+    <div class="top-right-bar">
+      <button type="button" id="dashThemeBtn" class="theme-switch-btn" title="تبديل المظهر بين الأسود (دارك) والأبيض (وايت)">☀️ وضع الوايت</button>
+      <div id="botStatusPill" class="bot-pill offline">
+        <span>🤖</span>
+        <span id="botStatusText">محاكي البوت نشط</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Top Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div>
+          <div class="stat-lbl">إجمالي الأجهزة المفعّلة</div>
+          <div class="stat-num" id="statTotal">0</div>
+        </div>
+        <div class="stat-icon">🖥</div>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-lbl">اشتراكات شغالة حالياً</div>
+          <div class="stat-num" id="statActive" style="color:var(--ok);">0</div>
+        </div>
+        <div class="stat-icon">🟢</div>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-lbl">اشتراكات مقطوعة / موقوفة</div>
+          <div class="stat-num" id="statSuspended" style="color:var(--danger);">0</div>
+        </div>
+        <div class="stat-icon">🚫</div>
+      </div>
+      <div class="stat-card">
+        <div>
+          <div class="stat-lbl">طلبات دفع بانتظار المراجعة</div>
+          <div class="stat-num" id="statPending" style="color:var(--warn);">0</div>
+        </div>
+        <div class="stat-icon">⏳</div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 1: LIVE FULL TEST ==================== -->
+    <div id="tab-sim" class="tab-pane active">
+      <div class="card" style="padding:13px 18px;margin-bottom:16px;border-color:var(--border-strong);">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div>
+            <b style="font-size:13.5px;">🖥 بصمة الهاردوير الثابتة (HWID) + الهوية الرسمية (دارك / وايت):</b>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+              جرب الضغط على زر <b>☀️ وايت / 🌙 دارك</b> أعلى الصفحة أو داخل الأداة لتبديل الهوية بالكامل بين الأسود الفخم والأبيض النقي!
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" id="btnRestoreRealHwid" style="padding:7px 12px;font-size:11.5px;">🖥 قراءة بصمة الهاردوير الحقيقية لجهازي</button>
+            <button type="button" class="btn btn-ghost" id="btnNewSimDevice" style="padding:7px 12px;font-size:11.5px;">🎲 محاكاة جهاز عميل آخر</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="simPendingArea"></div>
+
+      <div class="sim-grid">
+        <!-- Right: Real Extension Popup -->
+        <div class="card" style="padding:14px;">
+          <div class="card-title" style="margin-bottom:10px;padding-bottom:8px;">
+            <span>📱 1. أداة العميل بالهوية الجديدة (مصري / EN + دارك / وايت)</span>
+            <span style="font-size:11px;color:var(--ok);">🛡️ مشفرة ومحمية</span>
+          </div>
+          <div style="display:flex;justify-content:center;background:var(--card-2);border-radius:12px;padding:8px 0;border:1px solid var(--border);">
+            <iframe id="extFrame" src="/ext/popup.html" style="width:395px;height:655px;border:none;border-radius:10px;"></iframe>
+          </div>
+        </div>
+
+        <!-- Left: Interactive Telegram Bot Simulator -->
+        <div class="tg-chat-window">
+          <div class="tg-head">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="/logo.png" alt="SH12 Pro" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border-strong);object-fit:cover;">
+              <div>
+                <div style="font-weight:900;font-size:14px;">بوت اشتراكات SH12 Pro (<span dir="ltr">@SH12Pro_Sub_bot</span>)</div>
+                <div style="font-size:11px;color:var(--ok);">● متصل — فودافون كاش / إنستا باي / اتصالات | الدعم: <span dir="ltr">@vvshiko</span></div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-ghost" id="btnRestartBotSim" style="padding:5px 10px;font-size:11.5px;">🔄 بدء من جديد (/start)</button>
+          </div>
+
+          <div class="tg-messages" id="tgMessages"></div>
+
+          <div class="tg-foot">
+            <input type="text" id="tgInput" placeholder="ابعت سيريال الهاردوير هنا (ID-XXXX-XXXX-XXXX)..." dir="ltr" style="flex:1;">
+            <button type="button" class="btn btn-primary" id="btnTgSend">إرسال ➤</button>
+            <button type="button" class="btn btn-ok" id="btnTgSendScreenshot">📸 إرسال اسكرين التحويل</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: SUBSCRIBERS MANAGEMENT ==================== -->
+    <div id="tab-subs" class="tab-pane">
+      <div class="card">
+        <div class="card-title">
+          <span>⚡ إضافة مشترك جديد / توليد وتفعيل سيريال فوري + كارت VIP</span>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn btn-ghost" id="btnExportBackup" style="padding:6px 12px;font-size:12px;">📥 تحميل نسخة احتياطية للمشتركين (JSON)</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>سيريال هاردوير العميل (Device ID)</label>
+            <input type="text" id="newSubDeviceId" dir="ltr" placeholder="ID-XXXX-XXXX-XXXX">
+          </div>
+          <div>
+            <label>اسم العميل / ملاحظة</label>
+            <input type="text" id="newSubName" placeholder="مثال: أحمد محمد">
+          </div>
+          <div>
+            <label>يوزر تيليجرام (اختياري)</label>
+            <input type="text" id="newSubTg" dir="ltr" placeholder="username">
+          </div>
+          <button type="button" class="btn btn-primary" id="btnCreateSub">🔑 توليد وتفعيل الاشتراك</button>
+        </div>
+      </div>
+
+      <!-- Broadcast Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>📢 إرسال إشعار جماعي لكل عملاء البوت (@SH12Pro_Sub_bot)</span>
+          <span id="broadcastMsg" style="font-size:12px;color:var(--ok);"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">
+          <input type="text" id="broadcastInput" placeholder="اكتب رسالة أو تحديث أو عرض ليصل لجميع مستخدمي البوت فوراً...">
+          <button type="button" class="btn btn-primary" id="btnSendBroadcast">📢 إرسال للجميع الآن</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>👥 قائمة المشتركين والتحكم الفوري (قطع الاشتراك / إعادة التفعيل / تحميل كارت VIP)</span>
+          <input type="text" id="searchSubs" placeholder="🔍 بحث بالاسم أو سيريال الجهاز..." style="max-width:260px;padding:7px 12px;font-size:12px;">
+        </div>
+        <div class="table-wrap" id="subsTableContainer"></div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: CASH ORDERS REVIEW ==================== -->
+    <div id="tab-orders" class="tab-pane">
+      <div class="card">
+        <div class="card-title">
+          <span>📸 طلبات الدفع المرسلة من البوت (@SH12Pro_Sub_bot)</span>
+        </div>
+        <div id="ordersContainer" class="orders-grid"></div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: MULTI-PAYMENT METHODS & BOT TOKEN ==================== -->
+    <div id="tab-payments" class="tab-pane">
+      <div class="card">
+        <div class="card-title">
+          <span>🤖 إعدادات بوت الاشتراكات (@SH12Pro_Sub_bot) والدعم الفني (@vvshiko)</span>
+          <span id="saveMsg" style="font-size:12.5px;color:var(--ok);"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px;">
+          <div>
+            <label>توكن بوت التيليجرام (Bot Token من @BotFather):</label>
+            <input type="text" id="cfgBotToken" dir="ltr" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
+          </div>
+          <div>
+            <label>الـ ID الخاص بك كأدمن لاستقبال طلبات القبول والرفض (أرسل /id للبوت):</label>
+            <input type="text" id="cfgAdminChatId" dir="ltr" placeholder="مثال: 7304264634">
+          </div>
+          <div>
+            <label>سعر اشتراك مدى الحياة (يظهر على زر الشراء في البوت):</label>
+            <input type="text" id="cfgPlanPrice" placeholder="مثال: 250 ج.م">
+          </div>
+          <div>
+            <label>يوزر بوت الاشتراكات الرسمي (بدون @):</label>
+            <input type="text" id="cfgBotUser" dir="ltr" value="SH12Pro_Sub_bot" placeholder="SH12Pro_Sub_bot">
+          </div>
+          <div>
+            <label>يوزر حسابك الشخصي للدعم الفني والتطوير (بدون @):</label>
+            <input type="text" id="cfgSupportUser" dir="ltr" value="vvshiko" placeholder="vvshiko">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>💳 وسائل الدفع المتعددة (تظهر كأزرار اختيار للعميل داخل البوت بعد إرسال الـ ID)</span>
+          <button type="button" class="btn btn-ghost" id="btnAddPaymentMethod" style="padding:6px 12px;font-size:12px;">➕ إضافة وسيلة دفع جديدة</button>
+        </div>
+        <div id="paymentMethodsContainer"></div>
+        <div style="margin-top:14px;">
+          <button type="button" class="btn btn-primary" id="btnSaveSettings">💾 حفظ كل الإعدادات ووسائل الدفع وتحديث البوت فوراً</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: BOTFATHER KIT & EXTENSION ENCRYPTION ==================== -->
+    <div id="tab-botkit" class="tab-pane">
+      <div class="card">
+        <div class="card-title">
+          <span>🛡️ تشفير وحماية كود الإضافة (SH12 Pro Shield)</span>
+          <span id="rebuildMsg" style="font-size:12px;color:var(--ok);"></span>
+        </div>
+        <p style="margin:0 0 12px;color:var(--muted);font-size:13px;">
+          جميع ملفات الإضافة داخل المجلد <code class="mono" dir="ltr">d:\SH12 Pro</code> مشفرة بنظام <b>Hex XOR String Vault + Identifier Mangling + Anti-Tamper Checksum</b> ومربوطة بالهوية الرسمية واللوجو الثابت.
+        </p>
+        <div class="form-row" style="grid-template-columns:1fr auto;">
+          <div>
+            <label>رابط السيرفر المدمج داخل تشفير الإضافة (محلياً http://localhost:3000 أو رابط Render المجاني بعد الرفع):</label>
+            <input type="text" id="cfgServerUrl" dir="ltr" placeholder="http://localhost:3000">
+          </div>
+          <button type="button" class="btn btn-primary" id="btnRebuildEncrypted">🛡️ تحديث الرابط وإعادة تشفير ملفات الإضافة</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🎨 اللوجو الرسمي الثابت وهوية البوت الجاهزة للنسخ في @BotFather</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:250px 1fr;gap:20px;align-items:start;">
+          <!-- Official Logo Preview -->
+          <div style="text-align:center;background:var(--card-2);padding:16px;border-radius:14px;border:1px solid var(--border);">
+            <img src="/logo.png" alt="SH12 Pro Official Logo" style="width:190px;height:190px;border-radius:20px;border:1.5px solid var(--border-strong);object-fit:cover;margin-bottom:10px;box-shadow:0 8px 25px rgba(0,0,0,0.45);">
+            <a href="/logo.png" download="SH12-Pro-Official-Logo.png" class="btn btn-primary" style="width:100%;font-size:12px;text-decoration:none;">📥 تحميل اللوجو الرسمي (PNG)</a>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">اللوجو الرسمي المعتمد في الإضافة والموقع والبوت</div>
+          </div>
+
+          <!-- Ready Texts for BotFather -->
+          <div>
+            <div class="copy-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <b>1️⃣ اسم البوت المقترح (الأمر <code>/setname</code> في BotFather):</b>
+                <button type="button" class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;" onclick="copyText('SH12 Pro | البوت الرسمي للاشتراكات 💎', this)">📋 نسخ الاسم</button>
+              </div>
+              <pre>SH12 Pro | البوت الرسمي للاشتراكات 💎</pre>
+            </div>
+
+            <div class="copy-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <b>2️⃣ النبذة المختصرة في بروفايل البوت (الأمر <code>/setabouttext</code>):</b>
+                <button type="button" class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;" onclick="copyText(document.getElementById('bfAbout').textContent, this)">📋 نسخ النبذة</button>
+              </div>
+              <pre id="bfAbout">💎 البوت الرسمي لتفعيل أداة SH12 Pro مدى الحياة (خطة الدفع لمرة واحدة فقط) | تفعيل أوتوماتيكي فوري | الدعم والمطور: @vvshiko</pre>
+            </div>
+
+            <div class="copy-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <b>3️⃣ الوصف الترحيبي الذي يظهر للعميل قبل الضغط على Start (الأمر <code>/setdescription</code>):</b>
+                <button type="button" class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;" onclick="copyText(document.getElementById('bfDesc').textContent, this)">📋 نسخ الوصف</button>
+              </div>
+              <pre id="bfDesc">🚀 أهلاً بك في البوت الرسمي لأداة SH12 Pro (@SH12Pro_Sub_bot)!
+
+💎 خطة الدفع لمرة واحدة فقط (مدى الحياة · Lifetime):
+✔ فتح جميع طبقات التفعيل (12 شهر + طبقات الـ 6 شهور التراكمية)
+✔ اشتراك دائم مربوط ببصمة جهازك بدون أي رسوم شهرية
+✔ نظام حماية ذكي لفحص السعر ($0.00) قبل الاشتراك
+✔ دعم طرق دفع متعددة (فودافون كاش • إنستا باي • محافظ إلكترونية)
+✔ استلام سيريال التفعيل أوتوماتيكياً فور تأكيد التحويل
+
+👨‍💻 المطور والدعم الفني: @vvshiko
+👇 اضغط على زر (Start / بدء) بالأسفل لتفعيل جهازك الآن!</pre>
+            </div>
+
+            <div class="copy-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <b>4️⃣ قائمة أوامر البوت الجاهزة (الأمر <code>/setcommands</code>):</b>
+                <button type="button" class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;" onclick="copyText(document.getElementById('bfCmds').textContent, this)">📋 نسخ الأوامر</button>
+              </div>
+              <pre id="bfCmds">start - بدء البوت وشراء أو فحص الاشتراك 💎
+id - عرض معرّف حسابك في تيليجرام 🆔
+admin - لوحة تحكم الأدمن وإدارة المشتركين 👑</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  let appState = { settings: { paymentMethods: [] }, botInfo: {}, licenses: [], orders: [] };
+  let simStep = "IDLE";
+  let simDeviceId = "";
+  let simSelectedMethod = null;
+  let dashTheme = localStorage.getItem("sh12_dash_theme") || "dark";
+  let lastPendingCount = 0;
+
+  const dashThemeBtn = document.getElementById("dashThemeBtn");
+  function applyDashTheme(theme, notifyIframe = true) {
+    dashTheme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", dashTheme);
+    localStorage.setItem("sh12_dash_theme", dashTheme);
+    dashThemeBtn.textContent = dashTheme === "dark" ? "☀️ وضع الوايت" : "🌙 وضع الدارك";
+    if (notifyIframe) {
+      const extFrame = document.getElementById("extFrame");
+      if (extFrame && extFrame.contentWindow) {
+        extFrame.contentWindow.postMessage({ type: "sh12_set_theme", theme: dashTheme }, "*");
+      }
+    }
+  }
+
+  dashThemeBtn.addEventListener("click", () => {
+    applyDashTheme(dashTheme === "dark" ? "light" : "dark", true);
+  });
+
+  window.addEventListener("message", (ev) => {
+    if (ev.data && ev.data.type === "sh12_theme_changed" && ev.data.theme) {
+      applyDashTheme(ev.data.theme, false);
+    }
+  });
+
+  applyDashTheme(dashTheme, false);
+
+  // Tab Switching
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".tab-pane").forEach((p) => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  async function api(path, method = "GET", body = null) {
+    const opts = { method, headers: { "Content-Type": "application/json" } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(path, opts);
+    return res.json();
+  }
+
+  function playAlertSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(660, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.35);
+    } catch (e) {}
+  }
+
+  function getEnabledMethods() {
+    const list = (appState.settings && appState.settings.paymentMethods) || [];
+    const en = list.filter((m) => m.enabled !== false);
+    return en.length > 0 ? en : list;
+  }
+
+  async function refreshDashboard() {
+    try {
+      const data = await api("/api/admin/state");
+      if (!data.ok) return;
+      appState = data;
+
+      const total = data.licenses.length;
+      const active = data.licenses.filter((x) => x.status === "active").length;
+      const suspended = data.licenses.filter((x) => x.status === "suspended").length;
+      const pending = data.orders.filter((x) => x.status === "pending").length;
+
+      if (pending > lastPendingCount) {
+        playAlertSound();
+      }
+      lastPendingCount = pending;
+
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statActive").textContent = active;
+      document.getElementById("statSuspended").textContent = suspended;
+      document.getElementById("statPending").textContent = pending;
+      document.getElementById("navSubsCount").textContent = total;
+      document.getElementById("navPendingCount").textContent = pending;
+
+      const pill = document.getElementById("botStatusPill");
+      const pillTxt = document.getElementById("botStatusText");
+      if (data.botInfo && data.botInfo.connected) {
+        pill.className = "bot-pill online";
+        pillTxt.textContent = `البوت متصل: @${data.botInfo.username}`;
+      } else {
+        pill.className = "bot-pill offline";
+        pillTxt.textContent = "محاكي البوت نشط";
+      }
+
+      renderSubscribersTable();
+      renderOrdersGrid();
+      renderSimPendingBanner();
+    } catch (e) {}
+  }
+
+  /* VIP License Card Generator (Black & White Official Identity) */
+  const logoImgObj = new Image();
+  logoImgObj.src = "/logo.png";
+
+  window.downloadVipCard = (customerName, deviceId, licenseKey) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 900;
+    canvas.height = 500;
+    const ctx = canvas.getContext("2d");
+
+    // Pitch Black Luxury Background
+    ctx.fillStyle = "#040406";
+    ctx.fillRect(0, 0, 900, 500);
+
+    // Subtle Metallic Border
+    ctx.strokeStyle = "rgba(255,255,255,0.85)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(22, 22, 856, 456);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(32, 32, 836, 436);
+
+    // Draw Official Logo
+    try {
+      ctx.drawImage(logoImgObj, 60, 55, 115, 115);
+    } catch (e) {}
+
+    // Header Title
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "left";
+    ctx.font = "italic 900 44px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText("SH12 PRO", 195, 108);
+
+    ctx.fillStyle = "#a1a1aa";
+    ctx.font = "700 18px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText("LIFETIME VIP LICENSE CERTIFICATE  •  ONE-TIME PAYMENT", 195, 142);
+
+    // Divider
+    ctx.fillStyle = "rgba(255,255,255,0.15)";
+    ctx.fillRect(60, 192, 780, 1.5);
+
+    // Customer & HWID Info
+    ctx.fillStyle = "#a1a1aa";
+    ctx.font = "700 17px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText("ISSUED TO:", 60, 238);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "900 22px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText(customerName || "VIP Member", 180, 238);
+
+    ctx.fillStyle = "#a1a1aa";
+    ctx.font = "700 17px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText("HARDWARE ID:", 60, 282);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "900 22px 'Consolas', monospace";
+    ctx.fillText(deviceId, 205, 282);
+
+    // White Pill Box for License Key
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.roundRect(60, 320, 780, 88, 16);
+    ctx.fill();
+
+    ctx.fillStyle = "#000000";
+    ctx.textAlign = "center";
+    ctx.font = "900 32px 'Consolas', 'Courier New', monospace";
+    ctx.fillText(licenseKey, 450, 375);
+
+    // Footer
+    ctx.fillStyle = "#a1a1aa";
+    ctx.font = "700 15px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText("Official Bot: @SH12Pro_Sub_bot   |   Developer & Support: @vvshiko", 450, 442);
+
+    const a = document.createElement("a");
+    a.download = `SH12-Pro-VIP-${deviceId}.png`;
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  };
+
+  function renderPaymentMethodsEditor() {
+    const wrap = document.getElementById("paymentMethodsContainer");
+    const methods = (appState.settings && appState.settings.paymentMethods) || [];
+    wrap.innerHTML = methods
+      .map(
+        (m, idx) => `
+      <div class="pm-item" data-idx="${idx}">
+        <div>
+          <label>اسم وسيلة الدفع (يظهر كزر للعميل):</label>
+          <input type="text" class="pm-name" value="${(m.name || "").replace(/"/g, "&quot;")}" placeholder="مثال: 🔴 فودافون كاش">
+        </div>
+        <div>
+          <label>رقم المحفظة / حساب إنستا باي / ID:</label>
+          <input type="text" class="pm-account" dir="ltr" value="${(m.account || "").replace(/"/g, "&quot;")}" placeholder="010XXXXXXXX">
+        </div>
+        <div>
+          <label>تعليمات تظهر للعميل عند اختيارها:</label>
+          <input type="text" class="pm-note" value="${(m.note || "").replace(/"/g, "&quot;")}" placeholder="حوّل المبلغ ثم أرسل صورة الإيصال">
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <label style="display:flex;align-items:center;gap:5px;margin:0;cursor:pointer;color:var(--text);">
+            <input type="checkbox" class="pm-enabled" style="width:17px;height:17px;" ${m.enabled !== false ? "checked" : ""}>
+            <span>مفعّلة</span>
+          </label>
+          <button type="button" class="btn btn-danger" style="padding:8px 11px;" onclick="removePaymentMethod(${idx})">🗑</button>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  window.removePaymentMethod = (idx) => {
+    collectPaymentMethodsFromDom();
+    appState.settings.paymentMethods.splice(idx, 1);
+    renderPaymentMethodsEditor();
+  };
+
+  document.getElementById("btnAddPaymentMethod").addEventListener("click", () => {
+    collectPaymentMethodsFromDom();
+    appState.settings.paymentMethods.push({
+      id: "pm_" + Date.now(),
+      name: "💳 وسيلة دفع جديدة",
+      account: "010XXXXXXXX",
+      note: "حوّل المبلغ ثم أرسل اسكرين شوت التحويل هنا",
+      enabled: true
+    });
+    renderPaymentMethodsEditor();
+  });
+
+  function collectPaymentMethodsFromDom() {
+    const items = document.querySelectorAll("#paymentMethodsContainer .pm-item");
+    const out = [];
+    items.forEach((el, idx) => {
+      const orig = (appState.settings.paymentMethods && appState.settings.paymentMethods[idx]) || {};
+      out.push({
+        id: orig.id || "pm_" + idx + "_" + Date.now(),
+        name: el.querySelector(".pm-name").value.trim() || "وسيلة دفع",
+        account: el.querySelector(".pm-account").value.trim(),
+        note: el.querySelector(".pm-note").value.trim(),
+        enabled: el.querySelector(".pm-enabled").checked
+      });
+    });
+    appState.settings.paymentMethods = out;
+    return out;
+  }
+
+  function renderSubscribersTable() {
+    const q = (document.getElementById("searchSubs").value || "").trim().toLowerCase();
+    const list = appState.licenses.filter((l) => {
+      if (!q) return true;
+      return (
+        (l.customerName && l.customerName.toLowerCase().includes(q)) ||
+        (l.deviceId && l.deviceId.toLowerCase().includes(q)) ||
+        (l.licenseKey && l.licenseKey.toLowerCase().includes(q))
+      );
+    });
+
+    const wrap = document.getElementById("subsTableContainer");
+    if (list.length === 0) {
+      wrap.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);">لا يوجد مشتركون مسجلون حالياً.</div>`;
+      return;
+    }
+
+    let html = `<table>
+      <thead>
+        <tr>
+          <th>العميل</th>
+          <th>سيريال الهاردوير (HWID)</th>
+          <th>سيريال التفعيل (مدى الحياة)</th>
+          <th>الحالة</th>
+          <th>آخر ظهور بالأداة</th>
+          <th>التحكم في الاشتراك + كارت VIP</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    list.forEach((l) => {
+      const isAct = l.status === "active";
+      const statusBadge = isAct
+        ? `<span class="status-pill active">🟢 شغال (مفعّل)</span>`
+        : `<span class="status-pill suspended">🔴 مقطوع / موقوف</span>`;
+      const lastSeen = l.lastSeenAt ? new Date(l.lastSeenAt).toLocaleTimeString("ar-EG") : "لم يتصل بعد";
+      const safeName = (l.customerName || "مشترك").replace(/'/g, "");
+
+      html += `<tr>
+        <td>
+          <b>${l.customerName || "مشترك"}</b>
+          ${l.telegramUsername ? `<div style="font-size:11px;color:var(--muted);" dir="ltr">@${l.telegramUsername}</div>` : ""}
+        </td>
+        <td><code class="mono" dir="ltr">${l.deviceId}</code></td>
+        <td><code class="mono" dir="ltr">${l.licenseKey}</code></td>
+        <td>${statusBadge}</td>
+        <td style="font-size:12px;color:var(--muted);">${lastSeen}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${
+              isAct
+                ? `<button type="button" class="btn btn-danger" style="padding:6px 11px;font-size:11.5px;" onclick="toggleSub('${l.deviceId}', 'suspended')">🚫 قطع الاشتراك</button>`
+                : `<button type="button" class="btn btn-ok" style="padding:6px 11px;font-size:11.5px;" onclick="toggleSub('${l.deviceId}', 'active')">✅ إعادة التفعيل</button>`
+            }
+            <button type="button" class="btn btn-ghost" style="padding:6px 10px;font-size:11.5px;" onclick="copyText('${l.licenseKey}', this)">📋 نسخ السيريال</button>
+            <button type="button" class="btn btn-primary" style="padding:6px 10px;font-size:11.5px;" onclick="downloadVipCard('${safeName}', '${l.deviceId}', '${l.licenseKey}')">🎫 كارت VIP</button>
+            <button type="button" class="btn btn-danger" style="padding:6px 10px;font-size:11.5px;" onclick="deleteSub('${l.deviceId}')">🗑 حذف نهائي</button>
+          </div>
+        </td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+    wrap.innerHTML = html;
+  }
+
+  function renderOrdersGrid() {
+    const wrap = document.getElementById("ordersContainer");
+    if (!appState.orders || appState.orders.length === 0) {
+      wrap.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--muted);">لا توجد طلبات دفع حتى الآن.</div>`;
+      return;
+    }
+
+    wrap.innerHTML = appState.orders
+      .map((o) => {
+        const isPending = o.status === "pending";
+        const stBadge =
+          o.status === "pending"
+            ? `<span class="status-pill pending">⏳ بانتظار المراجعة</span>`
+            : o.status === "approved"
+            ? `<span class="status-pill active">✅ مقبول وتم إرسال السيريال</span>`
+            : `<span class="status-pill suspended">❌ مرفوض</span>`;
+
+        const imgSrc = o.photoDataUrl
+          ? o.photoDataUrl
+          : o.photoFileId
+          ? `/api/tg-photo?file_id=${encodeURIComponent(o.photoFileId)}`
+          : "";
+
+        return `<div class="order-card ${isPending ? "pending" : ""}">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <b>طلب #${o.orderId}</b>
+            ${stBadge}
+          </div>
+          <div style="font-size:12.5px;">
+            <div>👤 <b>العميل:</b> ${o.customerName} ${o.telegramUsername ? `(@${o.telegramUsername})` : ""}</div>
+            <div>💳 <b>وسيلة الدفع:</b> ${o.paymentMethodName || "تحويل كاش"}</div>
+            <div>🖥 <b>سيريال الجهاز:</b> <code class="mono" dir="ltr">${o.deviceId}</code></div>
+            <div>💵 <b>المبلغ:</b> ${o.price}</div>
+            ${o.licenseKey ? `<div style="margin-top:4px;">🔑 <b>السيريال المرسل:</b> <code class="mono" dir="ltr">${o.licenseKey}</code></div>` : ""}
+          </div>
+          ${
+            imgSrc
+              ? `<img src="${imgSrc}" class="screenshot-preview" alt="Screenshot" onclick="window.open(this.src)">`
+              : `<div style="padding:18px;text-align:center;background:#050507;border-radius:10px;font-size:12px;color:var(--muted);">🧾 إيصال تحويل</div>`
+          }
+          ${
+            isPending
+              ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+                  <button type="button" class="btn btn-ok" onclick="decideOrder('${o.orderId}', 'approve')">✅ قبول وإرسال السيريال</button>
+                  <button type="button" class="btn btn-danger" onclick="decideOrder('${o.orderId}', 'reject')">❌ رفض الطلب</button>
+                </div>`
+              : ""
+          }
+        </div>`;
+      })
+      .join("");
+  }
+
+  function renderSimPendingBanner() {
+    const pendingOrders = (appState.orders || []).filter((x) => x.status === "pending");
+    const box = document.getElementById("simPendingArea");
+    if (pendingOrders.length === 0) {
+      box.innerHTML = "";
+      return;
+    }
+    const latest = pendingOrders[0];
+    box.innerHTML = `
+      <div class="card" style="border-color:var(--warn);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <span class="status-pill pending" style="margin-bottom:4px;">🔔 إشعار للأدمن: طلب مراجعة دفع جديد (#${latest.orderId}) — ${latest.paymentMethodName || ""}</span>
+          <div style="font-size:13px;margin-top:4px;">
+            العميل <b>${latest.customerName}</b> أرسل سيريال الهاردوير <code class="mono" dir="ltr">${latest.deviceId}</code> وصورة إيصال (${latest.price}).
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-ok" onclick="decideOrder('${latest.orderId}', 'approve')">✅ قبول وصناعة وإرسال السيريال للعميل</button>
+          <button type="button" class="btn btn-danger" onclick="decideOrder('${latest.orderId}', 'reject')">❌ رفض الطلب</button>
+        </div>
+      </div>
+    `;
+  }
+
+  window.toggleSub = async (deviceId, status) => {
+    await api("/api/admin/license/toggle", "POST", { deviceId, status });
+    await refreshDashboard();
+    const extFrame = document.getElementById("extFrame");
+    if (extFrame && extFrame.contentWindow) {
+      extFrame.contentWindow.postMessage({ type: "sh12_check_server" }, "*");
+    }
+  };
+
+  window.deleteSub = async (deviceId) => {
+    await api("/api/admin/license/delete", "POST", { deviceId });
+    await refreshDashboard();
+    const extFrame = document.getElementById("extFrame");
+    if (extFrame && extFrame.contentWindow) {
+      extFrame.contentWindow.postMessage({ type: "sh12_check_server" }, "*");
+    }
+  };
+
+  window.copyText = (txt, btn) => {
+    navigator.clipboard.writeText(txt);
+    const old = btn.textContent;
+    btn.textContent = "تم النسخ ✓";
+    setTimeout(() => (btn.textContent = old), 1200);
+  };
+
+  window.decideOrder = async (orderId, action) => {
+    const res = await api("/api/admin/order/decision", "POST", { orderId, action });
+    await refreshDashboard();
+    if (res.ok && res.order) {
+      if (action === "approve") {
+        appendBotMsg(
+          `🎉 <b>مبروك! تم قبول تحويلك وتفعيل اشتراكك الدائم (مدى الحياة) في أداة SH12 Pro!</b><br><br>` +
+            `🖥 <b>سيريال الهاردوير لجهازك:</b><br><code class="mono" dir="ltr">${res.order.deviceId}</code><br><br>` +
+            `🔑 <b>سيريال التفعيل الخاص بك:</b><br><code class="mono" dir="ltr" style="font-size:14px;">${res.order.licenseKey}</code><br><br>` +
+            `<button class="tg-inline-btn" onclick="autoFillKeyInExtension('${res.order.licenseKey}')">⚡ اضغط هنا لتجربة لصق السيريال وتفعيل الأداة فوراً</button>`
+        );
+      } else {
+        appendBotMsg(`❌ <b>عذراً، تم رفض طلب الاشتراك رقم #${res.order.orderId}</b> لعدم تأكيد إيصال التحويل.`);
+      }
+    }
+  };
+
+  window.autoFillKeyInExtension = (key) => {
+    const extFrame = document.getElementById("extFrame");
+    if (extFrame && extFrame.contentWindow) {
+      extFrame.contentWindow.postMessage({ type: "sh12_fill_key", key }, "*");
+    }
+  };
+
+  document.getElementById("btnCreateSub").addEventListener("click", async () => {
+    const deviceId = document.getElementById("newSubDeviceId").value.trim();
+    const customerName = document.getElementById("newSubName").value.trim();
+    const telegramUsername = document.getElementById("newSubTg").value.trim().replace(/^@/, "");
+    const res = await api("/api/admin/license/create", "POST", { deviceId, customerName, telegramUsername });
+    if (!res.ok) {
+      alert(res.error || "خطأ في صيغة سيريال الجهاز");
+      return;
+    }
+    document.getElementById("newSubDeviceId").value = "";
+    document.getElementById("newSubName").value = "";
+    document.getElementById("newSubTg").value = "";
+    await refreshDashboard();
+  });
+
+  document.getElementById("btnExportBackup").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(appState, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `SH12-Pro-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+  });
+
+  document.getElementById("btnSendBroadcast").addEventListener("click", async () => {
+    const message = document.getElementById("broadcastInput").value.trim();
+    if (!message) return;
+    const res = await api("/api/admin/broadcast", "POST", { message });
+    const msgEl = document.getElementById("broadcastMsg");
+    if (res.ok) {
+      document.getElementById("broadcastInput").value = "";
+      msgEl.textContent = `✅ تم إرسال الإشعار الجماعي إلى ${res.sentCount} عميل بنجاح!`;
+      setTimeout(() => (msgEl.textContent = ""), 4000);
+    }
+  });
+
+  document.getElementById("searchSubs").addEventListener("input", renderSubscribersTable);
+
+  // Save Settings & Multi-Payment Methods
+  document.getElementById("btnSaveSettings").addEventListener("click", async () => {
+    const paymentMethods = collectPaymentMethodsFromDom();
+    const payload = {
+      botToken: document.getElementById("cfgBotToken").value,
+      adminChatId: document.getElementById("cfgAdminChatId").value,
+      planPrice: document.getElementById("cfgPlanPrice").value,
+      botUsername: document.getElementById("cfgBotUser").value.replace(/^@/, ""),
+      supportUsername: document.getElementById("cfgSupportUser").value.replace(/^@/, ""),
+      paymentMethods
+    };
+    await api("/api/admin/settings", "POST", payload);
+    const msg = document.getElementById("saveMsg");
+    msg.textContent = "✅ تم حفظ الإعدادات ووسائل الدفع وتحديث البوت فوراً!";
+    setTimeout(() => (msg.textContent = ""), 3000);
+    await refreshDashboard();
+    startBotSim();
+  });
+
+  // Rebuild Obfuscated Extension with Server URL
+  document.getElementById("btnRebuildEncrypted").addEventListener("click", async () => {
+    const serverUrl = document.getElementById("cfgServerUrl").value.trim();
+    const res = await api("/api/admin/rebuild-extension", "POST", { serverUrl });
+    if (res.ok) {
+      const m = document.getElementById("rebuildMsg");
+      m.textContent = `✅ تم تشفير وحماية ملفات الإضافة بنجاح على الرابط: ${res.serverUrl}`;
+      setTimeout(() => (m.textContent = ""), 4000);
+    }
+  });
+
+  /* ======================== INTERACTIVE MULTI-PAYMENT BOT SIMULATOR ======================== */
+  const tgMessagesEl = document.getElementById("tgMessages");
+  const tgInputEl = document.getElementById("tgInput");
+
+  function appendBotMsg(html) {
+    const d = document.createElement("div");
+    d.className = "tg-bubble bot";
+    d.innerHTML = html;
+    tgMessagesEl.appendChild(d);
+    tgMessagesEl.scrollTop = tgMessagesEl.scrollHeight;
+  }
+
+  function appendUserMsg(html) {
+    const d = document.createElement("div");
+    d.className = "tg-bubble user";
+    d.innerHTML = html;
+    tgMessagesEl.appendChild(d);
+    tgMessagesEl.scrollTop = tgMessagesEl.scrollHeight;
+  }
+
+  function startBotSim() {
+    tgMessagesEl.innerHTML = "";
+    simStep = "IDLE";
+    simDeviceId = "";
+    simSelectedMethod = null;
+    const price = (appState.settings && appState.settings.planPrice) || "250 ج.م";
+    appendUserMsg("/start");
+    appendBotMsg(
+      `أهلاً بيك في البوت الرسمي لأداة <b>SH12 Pro</b> (<span dir="ltr">@SH12Pro_Sub_bot</span>) 🚀<br><br>` +
+        `💎 <b>خطة الدفع لمرة واحدة فقط (مدى الحياة · Lifetime):</b><br>` +
+        `✔ فتح كل طبقات التفعيل (12 شهر + 6 شهور)<br>` +
+        `✔ تفعيل مربوط ببصمة هاردوير جهازك مدى الحياة<br><br>` +
+        `💵 <b>سعر الاشتراك الدائم:</b> <code>${price}</code><br>` +
+        `👇 اضغط على زر الشراء لبدء التفعيل:` +
+        `<button class="tg-inline-btn" onclick="simClickBuy()">💎 شراء الاشتراك الدائم (${price} · دفع لمرة واحدة)</button>`
+    );
+  }
+
+  window.simClickBuy = () => {
+    simStep = "AWAITING_DEVICE_ID";
+    appendUserMsg("💎 شراء الاشتراك الدائم");
+    appendBotMsg(
+      `🖥 <b>الخطوة (1 من 3): إرسال سيريال الهاردوير (Device ID)</b><br><br>` +
+        `انسخ <b>سيريال الهاردوير الثابت</b> من أداة SH12 Pro على اليمين وابعته هنا في الشات:`
+    );
+    tgInputEl.focus();
+  };
+
+  function showSimPaymentMethods() {
+    const methods = getEnabledMethods();
+    const btnsHtml = methods
+      .map(
+        (m, idx) =>
+          `<button class="tg-inline-btn" onclick="simSelectMethod(${idx})">${m.name}</button>`
+      )
+      .join("");
+
+    appendBotMsg(
+      `✅ <b>تم تسجيل سيريال الهاردوير لجهازك:</b><br><code class="mono" dir="ltr">${simDeviceId}</code><br><br>` +
+        `💳 <b>الخطوة (2 من 3): اختر وسيلة الدفع المناسبة لك من القائمة:</b>` +
+        btnsHtml
+    );
+  }
+
+  window.simSelectMethod = (idx) => {
+    const methods = getEnabledMethods();
+    const chosen = methods[idx] || methods[0];
+    simSelectedMethod = chosen;
+    simStep = "AWAITING_SCREENSHOT";
+    const price = (appState.settings && appState.settings.planPrice) || "250 ج.م";
+
+    appendUserMsg(chosen.name);
+    appendBotMsg(
+      `💳 <b>وسيلة الدفع المختارة:</b> ${chosen.name}<br>` +
+        `🖥 <b>سيريال الجهاز:</b> <code class="mono" dir="ltr">${simDeviceId}</code><br>` +
+        `━━━━━━━━━━━━━━<br>` +
+        `💵 <b>المبلغ المطلوب:</b> <code>${price}</code><br>` +
+        `📲 <b>رقم / حساب التحويل:</b> <code class="mono" dir="ltr">${chosen.account}</code><br>` +
+        `📝 <b>تعليمات:</b> ${chosen.note || ""}<br>` +
+        `━━━━━━━━━━━━━━<br>` +
+        `📸 <b>الخطوة (3 من 3): اضغط الآن على زر «📸 إرسال اسكرين التحويل» بالأسفل لإرسال الإيصال للمراجعة:</b>`
+    );
+  };
+
+  function handleSimUserText() {
+    const txt = tgInputEl.value.trim();
+    if (!txt) return;
+    tgInputEl.value = "";
+    appendUserMsg(`<span dir="ltr">${txt}</span>`);
+
+    const match = txt.toUpperCase().match(/ID[-_ ]?([A-Z0-9]{4})[-_ ]?([A-Z0-9]{4})[-_ ]?([A-Z0-9]{4})/);
+    if (!match) {
+      appendBotMsg(`⚠️ صيغة سيريال الجهاز غير صحيحة! انسخ السيريال الذي يبدأ بـ <code>ID-XXXX-XXXX-XXXX</code> من الأداة يميناً.`);
+      return;
+    }
+
+    simDeviceId = `ID-${match[1]}-${match[2]}-${match[3]}`;
+    simStep = "AWAITING_PAYMENT_METHOD";
+    showSimPaymentMethods();
+  }
+
+  document.getElementById("btnTgSend").addEventListener("click", handleSimUserText);
+  tgInputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleSimUserText();
+  });
+
+  document.getElementById("btnTgSendScreenshot").addEventListener("click", async () => {
+    if (!simDeviceId) {
+      appendBotMsg(`⚠️ اضغط على زر الشراء وابعت <b>سيريال الجهاز (Device ID)</b> الأول!`);
+      return;
+    }
+    if (!simSelectedMethod) {
+      simSelectedMethod = getEnabledMethods()[0];
+    }
+
+    const price = (appState.settings && appState.settings.planPrice) || "250 ج.م";
+    const mName = simSelectedMethod ? simSelectedMethod.name : "تحويل كاش";
+    const mAcc = simSelectedMethod ? simSelectedMethod.account : "";
+
+    const svgReceipt = `<svg xmlns="http://www.w3.org/2000/svg" width="340" height="190" viewBox="0 0 340 190">
+      <rect width="340" height="190" rx="14" fill="#050507" stroke="#ffffff" stroke-width="2"/>
+      <text x="170" y="36" fill="#10b981" font-family="Segoe UI, Tahoma" font-size="15" font-weight="bold" text-anchor="middle">✅ إيصال دفع ناجح</text>
+      <text x="170" y="68" fill="#ffffff" font-family="Segoe UI, Tahoma" font-size="19" font-weight="bold" text-anchor="middle">${price}</text>
+      <text x="170" y="98" fill="#d4d4d8" font-family="Segoe UI, Tahoma" font-size="13" text-anchor="middle">${mName}</text>
+      <text x="170" y="124" fill="#a1a1aa" font-family="Consolas, monospace" font-size="12" text-anchor="middle">To: ${mAcc}</text>
+      <text x="170" y="152" fill="#ffffff" font-family="Consolas, monospace" font-size="12" text-anchor="middle">HWID: ${simDeviceId}</text>
+    </svg>`;
+    const dataUrl = "data:image/svg+xml;utf8," + encodeURIComponent(svgReceipt);
+
+    appendUserMsg(`📸 [اسكرين تحويل — ${mName} — ${price}]`);
+
+    const res = await api("/api/sim/order", "POST", {
+      deviceId: simDeviceId,
+      paymentMethodName: mName,
+      customerName: "عميل تيليجرام",
+      telegramUsername: "sh12_buyer",
+      photoDataUrl: dataUrl
+    });
+
+    if (res.ok && res.order) {
+      appendBotMsg(
+        `⏳ <b>تم استلام صورة الإيصال بنجاح!</b><br>` +
+          `📋 رقم الطلب: <code>#${res.order.orderId}</code><br>` +
+          `💳 وسيلة الدفع: <b>${mName}</b><br>` +
+          `جاري مراجعة التحويل من الإدارة، وهيوصلك <b>سيريال التفعيل</b> هنا تلقائياً فور القبول ✅`
+      );
+      await refreshDashboard();
+    }
+  });
+
+  document.getElementById("btnRestartBotSim").addEventListener("click", startBotSim);
+
+  document.getElementById("btnNewSimDevice").addEventListener("click", () => {
+    const extFrame = document.getElementById("extFrame");
+    if (extFrame && extFrame.contentWindow) {
+      extFrame.contentWindow.postMessage({ type: "sh12_new_device", useRealHwid: false }, "*");
+    }
+  });
+
+  document.getElementById("btnRestoreRealHwid").addEventListener("click", () => {
+    const extFrame = document.getElementById("extFrame");
+    if (extFrame && extFrame.contentWindow) {
+      extFrame.contentWindow.postMessage({ type: "sh12_new_device", useRealHwid: true }, "*");
+    }
+  });
+
+  // Initial Load
+  (async () => {
+    await refreshDashboard();
+    if (appState.settings) {
+      document.getElementById("cfgBotToken").value = appState.settings.botToken || "";
+      document.getElementById("cfgAdminChatId").value = appState.settings.adminChatId || "";
+      document.getElementById("cfgPlanPrice").value = appState.settings.planPrice || "250 ج.م";
+      document.getElementById("cfgBotUser").value = appState.settings.botUsername || "SH12Pro_Sub_bot";
+      document.getElementById("cfgSupportUser").value = appState.settings.supportUsername || "vvshiko";
+      document.getElementById("cfgServerUrl").value = appState.settings.serverUrl || "http://localhost:3000";
+      renderPaymentMethodsEditor();
+    }
+    startBotSim();
+    setInterval(refreshDashboard, 2500);
+  })();
+</script>
+</body>
+</html>
